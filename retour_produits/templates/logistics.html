@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestion Logistique</h2>
+    
+    <!-- Filtres -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Statut</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">Tous</option>
+                        <option value="en_attente" {% if request.args.get('status') == 'en_attente' %}selected{% endif %}>En attente</option>
+                        <option value="en_cours" {% if request.args.get('status') == 'en_cours' %}selected{% endif %}>En cours</option>
+                        <option value="termine" {% if request.args.get('status') == 'termine' %}selected{% endif %}>Terminé</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="date_from" class="form-label">Date début</label>
+                    <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request.args.get('date_from', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="date_to" class="form-label">Date fin</label>
+                    <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request.args.get('date_to', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary d-block w-100">Filtrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des tickets -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>N° Ticket</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Produits</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.ticket_number }}</td>
+                    <td>{{ ticket.client.name }}</td>
+                    <td>{{ ticket.created_at.strftime('%d/%m/%Y') }}</td>
+                    <td>
+                        <span class="badge bg-{{ ticket.status_color }}">
+                            {{ ticket.status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#products-{{ ticket.id }}">
+                            Voir les produits
+                        </button>
+                        <div class="collapse mt-2" id="products-{{ ticket.id }}">
+                            {% for product in ticket.products %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ product.name }}</h6>
+                                    <p class="card-text">
+                                        Prix: {{ "%.2f"|format(product.price) }}€<br>
+                                        Référence: {{ product.product_ref }}
+                                    </p>
+                                    <form method="POST" action="{{ url_for('update_product_status', ticket_id=ticket.id, product_id=product.id) }}">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="quantity_{{ product.id }}" min="1" value="1" placeholder="Qté">
+                                            <button type="submit" class="btn btn-success">
+                                                Marquer comme reçu
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('view_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-primary">Voir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Paramètres</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('settings_page') }}">
+                <!-- Informations de l'entreprise -->
+                <h4 class="mb-3">Informations de l'entreprise</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="company_name" class="form-label">Nom de l'entreprise</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" value="{{ settings.company_name }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="company_email" class="form-label">Email de l'entreprise</label>
+                        <input type="email" class="form-control" id="company_email" name="company_email" value="{{ settings.company_email }}">
+                    </div>
+                </div>
+
+                <!-- Configuration des sauvegardes -->
+                <h4 class="mb-3">Sauvegardes</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="backup_frequency" class="form-label">Fréquence des sauvegardes (heures)</label>
+                        <input type="number" class="form-control" id="backup_frequency" name="backup_frequency" value="{{ settings.backup_frequency }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="backup_retention" class="form-label">Rétention des sauvegardes (jours)</label>
+                        <input type="number" class="form-control" id="backup_retention" name="backup_retention" value="{{ settings.backup_retention }}">
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <h4 class="mb-3">Notifications</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="notification_email" class="form-label">Email de notification</label>
+                        <input type="email" class="form-control" id="notification_email" name="notification_email" value="{{ settings.notification_email }}">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="notify_new_ticket" name="notify_new_ticket" {% if settings.notify_new_ticket %}checked{% endif %}>
+                            <label class="form-check-label" for="notify_new_ticket">Nouveaux tickets</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="notify_status_change" name="notify_status_change" {% if settings.notify_status_change %}checked{% endif %}>
+                            <label class="form-check-label" for="notify_status_change">Changements de statut</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="notify_anomaly" name="notify_anomaly" {% if settings.notify_anomaly %}checked{% endif %}>
+                            <label class="form-check-label" for="notify_anomaly">Anomalies</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sécurité -->
+                <h4 class="mb-3">Sécurité</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="session_timeout" class="form-label">Délai d'expiration de session (minutes)</label>
+                        <input type="number" class="form-control" id="session_timeout" name="session_timeout" value="{{ settings.session_timeout }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="max_login_attempts" class="form-label">Nombre maximum de tentatives de connexion</label>
+                        <input type="number" class="form-control" id="max_login_attempts" name="max_login_attempts" value="{{ settings.max_login_attempts }}">
+                    </div>
+                </div>
+
+                <!-- Interface -->
+                <h4 class="mb-3">Interface</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="tickets_per_page" class="form-label">Tickets par page</label>
+                        <input type="number" class="form-control" id="tickets_per_page" name="tickets_per_page" value="{{ settings.tickets_per_page }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date_format" class="form-label">Format de date</label>
+                        <input type="text" class="form-control" id="date_format" name="date_format" value="{{ settings.date_format }}">
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

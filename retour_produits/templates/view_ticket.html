@@ -1,0 +1,526 @@
+{% extends "base.html" %}
+
+{% block title %}Détails du Ticket{% endblock %}
+
+{% block styles %}
+<style>
+    .ticket-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 30px 30px;
+    }
+
+    .ticket-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .ticket-meta {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .ticket-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .ticket-content {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-title i {
+        color: var(--primary-color);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        background: var(--light-gray);
+        padding: 1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .info-label {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        opacity: 0.7;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        font-weight: 500;
+        color: var(--text-color);
+    }
+
+    .product-card {
+        background: var(--light-gray);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .product-title {
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0;
+    }
+
+    .product-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .message-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .message-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .message-author {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .message-date {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        opacity: 0.7;
+    }
+
+    .message-content {
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    .reply-form {
+        background: var(--light-gray);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .status-open {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .status-closed {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .total-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .total-label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .total-amount {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Ticket #{{ ticket.ticket_number }}</h5>
+            <div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusModal">
+                    Modifier le statut
+                </button>
+                <a href="{{ url_for('edit_ticket', ticket_id=ticket.id) }}" class="btn btn-secondary">Modifier</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>Informations client</h6>
+                    <p><strong>Compte :</strong> {{ ticket.client.account_number }}</p>
+                    <p><strong>Nom :</strong> {{ ticket.client.name }}</p>
+                    <p><strong>Contact :</strong> {{ ticket.client.contact_name }}</p>
+                    <p><strong>Email :</strong> {{ ticket.client.contact_email }}</p>
+                    <p><strong>Téléphone :</strong> {{ ticket.client.contact_phone }}</p>
+                    <p><strong>SIRET :</strong> {{ ticket.client.siret }}</p>
+                    <p><strong>Adresse :</strong> {{ ticket.client.address }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6>Informations ticket</h6>
+                    <p><strong>Statut :</strong> 
+                        <span class="badge {% if ticket.status == 'valide' %}bg-success{% elif ticket.status == 'en_attente' %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ ticket.status|status_display }}
+                        </span>
+                    </p>
+                    <p><strong>Type de retour :</strong> {{ ticket.return_type|return_type_display }}</p>
+                    <p><strong>Créé le :</strong> {{ ticket.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p><strong>Dernière modification :</strong> {{ ticket.updated_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                    {% if ticket.notes %}
+                    <p><strong>Notes :</strong> {{ ticket.notes }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Frais -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>Frais de retour</h6>
+                    {% if ticket.shipping_cost_refund %}
+                    <p><strong>Frais de transport :</strong> {{ "%.2f"|format(ticket.shipping_cost_amount) }} €</p>
+                    {% endif %}
+                    {% if ticket.packaging_cost_refund %}
+                    <p><strong>Frais d'emballage :</strong> {{ "%.2f"|format(ticket.packaging_cost_amount) }} €</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Produits -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Produits</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Référence</th>
+                                    <th>Nom</th>
+                                    <th>Prix</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in ticket.products %}
+                                <tr>
+                                    <td>{{ product.product_ref }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ "%.2f"|format(product.price) }}€</td>
+                                    <td>
+                                        <span class="badge bg-{{ product.status|status_color }}">
+                                            {{ product.status|status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#receptionModal{{ product.id }}">
+                                            <i class="fas fa-box"></i> Réceptionner
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="mt-4">Messages</h6>
+            <div class="messages">
+                {% for message in ticket.messages|sort(attribute='created_at') %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">
+                                {{ message.user.username }} - {{ message.created_at.strftime('%d/%m/%Y %H:%M') }}
+                            </small>
+                        </div>
+                        <p class="mb-0">{{ message.content }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <form method="POST" action="{{ url_for('add_message', ticket_id=ticket.id) }}" class="mt-4">
+                <div class="mb-3">
+                    <label for="content" class="form-label">Nouveau message</label>
+                    <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+
+            <!-- Informations ticket -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Informations ticket</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Numéro de ticket :</strong> {{ ticket.ticket_number }}</p>
+                            <p><strong>Type de retour :</strong> {{ ticket.return_type|return_type_display }}</p>
+                            <p><strong>Statut :</strong> 
+                                <span class="badge bg-{{ ticket.status|status_color }}">
+                                    {{ ticket.status|status_display }}
+                                </span>
+                            </p>
+                            <p><strong>Attribution de la faute :</strong> {{ ticket.fault_attribution|fault_label }}</p>
+                            <p><strong>Motif du retour :</strong> {{ ticket.return_reason|reason_label }}</p>
+                            {% if ticket.return_reason_details %}
+                            <p><strong>Détails du motif :</strong> {{ ticket.return_reason_details }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Date de création :</strong> {{ ticket.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                            <p><strong>Dernière modification :</strong> {{ ticket.updated_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                            {% if ticket.credit_note_number %}
+                            <p><strong>Numéro d'avoir :</strong> {{ ticket.credit_note_number }}</p>
+                            <p><strong>Date d'avoir :</strong> {{ ticket.credit_note_date.strftime('%d/%m/%Y') }}</p>
+                            <p><strong>Statut de l'avoir :</strong> 
+                                {% if ticket.credit_note_validated %}
+                                <span class="badge bg-success">Validé</span>
+                                {% else %}
+                                <span class="badge bg-warning">En attente</span>
+                                {% endif %}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fichiers joints -->
+            {% if ticket.attachments %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Fichiers joints</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for attachment in ticket.attachments %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ attachment.original_filename }}</h6>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            {{ (attachment.file_size / 1024)|round(1) }} KB<br>
+                                            Ajouté le {{ attachment.uploaded_at.strftime('%d/%m/%Y %H:%M') }}
+                                        </small>
+                                    </p>
+                                    <div class="btn-group">
+                                        <a href="{{ url_for('download_attachment', attachment_id=attachment.id) }}" 
+                                           class="btn btn-sm btn-primary">
+                                            <i class="fas fa-download"></i> Télécharger
+                                        </a>
+                                        {% if current_user.is_admin %}
+                                        <button type="button" class="btn btn-sm btn-danger" 
+                                                onclick="deleteAttachment({{ attachment.id }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour modifier le statut -->
+<div class="modal fade" id="statusModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier le statut</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('update_ticket_status', ticket_id=ticket.id) }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="en_attente" {% if ticket.status == 'en_attente' %}selected{% endif %}>En attente</option>
+                            <option value="valide" {% if ticket.status == 'valide' %}selected{% endif %}>Validé</option>
+                            <option value="refuse" {% if ticket.status == 'refuse' %}selected{% endif %}>Refusé</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modals pour les détails de réception -->
+{% for product in ticket.products %}
+{% if product.receptions %}
+<div class="modal fade" id="receptionModal{{ product.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Réceptionner le produit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('update_product_status', ticket_id=ticket.id, product_id=product.id) }}">
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantité reçue</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity_{{ product.id }}" min="1" max="{{ product.total_quantity - product.total_received }}" value="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Valider la réception</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+<!-- Modals de suppression des pièces jointes -->
+{% for attachment in ticket.attachments %}
+<div class="modal fade" id="deleteAttachmentModal{{ attachment.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cette pièce jointe ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form method="POST" action="{{ url_for('delete_attachment', attachment_id=attachment.id) }}">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete() {
+    var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+function deleteAttachment(attachmentId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
+        fetch(`/attachment/${attachmentId}/delete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Erreur lors de la suppression du fichier');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Erreur lors de la suppression du fichier');
+        });
+    }
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,77 @@
+QUESTIONS SUPPLÉMENTAIRES POUR LE DÉVELOPPEMENT DU LOGICIEL SAV ALDER
+================================================================
+
+1. GESTION DES FRP
+-----------------
+- Pour le format FRP25-0001, souhaitez-vous que le système gère automatiquement l'incrémentation ?
+Oui si possible a savoir que nous aurons besoin de supprimer ou modifier des FRP, une automatisation du numéro mais avec possibilités de le modifier sera peut être intéressant
+- Pour les 4 pièces maximum par FRP, voulez-vous une limite stricte ou simplement une recommandation ?
+Non aucune limite mais si on vient a intégrer directement les données sur le document de FRP existant il faut que la FRP est maximum 4 pièces sinon pour le logiciel autant de pièces que l'utilistauer le souhaite
+- Pour les prix et décotes, avez-vous besoin de calculs automatiques du montant total ?
+Oui
+
+2. NIVEAUX D'ACCÈS
+-----------------
+- Quels types de niveaux d'accès souhaitez-vous ? (Par exemple : administrateur, gestionnaire SAV, logisticien, etc.)
+Ceux que tu pensent sont très bien :
+Admin logisticien comptabilité gestionnaire sav direction
+- Quelles actions doivent être restreintes à quels niveaux ?
+Globalement que chacun est leur module que tout le monde puisse regarder tout mais qu'il ne puisse pas modifier les données d'un autre service sans autorisation, sauf l'admin bien évidemment
+
+3. SYSTÈME DE NOTES
+------------------
+- Souhaitez-vous pouvoir attacher des notes à des étapes spécifiques du processus ?
+Oui intéressant
+- Voulez-vous un système de notification pour les notes importantes ?
+Oui pourquoi pas des rappels si l'utilisateur le chosisissant car nous faisons a titre d'exemple des enlèvements après avoir fini la FRP ce qui entraine parfois des oublis
+
+4. STATISTIQUES ET RAPPORTS
+--------------------------
+- Quels sont les types de statistiques que vous fournissez actuellement à la direction ?
+Taux CA par rapport au SAV
+Nombre de FRP sur une durée
+Monatnt moyen de la FRP
+Nombre de pièces jetés rentrés en stock en attente
+Meme stats sur les litiges transport et fournisseurs
+Montant des frp en attente valide pareil pour les litiges
+Et des stats sur tout le sav Globalement
+- Avez-vous besoin de graphiques ou de tableaux de bord spécifiques ?
+Des graphiques etc sont clairement un plus visuel
+
+5. GESTION DES LITIGES
+---------------------
+- Pourriez-vous me donner un exemple de document de litige transporteur et fournisseur ?
+Je peux te l'envoyer dans le chat après ca
+- Souhaitez-vous que le système génère automatiquement ces documents ?
+Si possible ce serait vraiment top, il faut aussi pouvoir l'imprimer
+
+6. SUIVI DES PIÈCES
+------------------
+- Quels sont les différents états possibles d'une pièce retournée ?
+Rentré en stock
+Détruite
+En attente (Raison de l'attente)
+- Avez-vous besoin d'un suivi visuel de l'état (par exemple, un code couleur) ?
+Oui super idée
+
+7. INTERFACE UTILISATEUR
+-----------------------
+- Souhaitez-vous une interface en onglets ou préférez-vous une navigation différente ? 
+Le plus simple et pro, suivre les choses déja faites par d'autre entreprise au niveau de leur logiciel de sav
+- Avez-vous besoin d'une vue d'ensemble (dashboard) en page d'accueil ?
+C'est une idée génial
+
+8. GESTION DES EMAILS
+--------------------
+- Pour les emails automatiques, quels types de messages souhaitez-vous pouvoir automatiser ?
+Le renvoi de la FRP rempli une fois validé
+- Voulez-vous des modèles d'emails personnalisables ?
+J'en ai deja un
+
+
+ESPACE POUR VOS RÉPONSES
+=======================
+
+[Veuillez répondre aux questions ci-dessus en les numérotant de la même manière] 
+
+N'hésite pas a continuer tes questions

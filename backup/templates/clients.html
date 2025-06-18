@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">
+                <i class="fas fa-building me-2"></i>
+                Gestion des clients
+            </h2>
+            <p class="text-muted mb-0">Gérez vos clients et leurs FRP associés</p>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newClientModal">
+            <i class="fas fa-plus me-2"></i>
+            Nouveau client
+        </button>
+    </div>
+
+    <!-- Liste des clients -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white py-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        Liste des clients
+                    </h5>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control" id="searchClient" placeholder="Rechercher un client...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Client</th>
+                            <th>Numéro de compte</th>
+                            <th>Contact</th>
+                            <th>FRP associés</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-primary bg-opacity-10 text-primary me-2">
+                                        {{ client.name[0].upper() }}
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">{{ client.name }}</div>
+                                        <small class="text-muted">{{ client.address }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ client.account_number }}</td>
+                            <td>
+                                <div>{{ client.contact_name }}</div>
+                                <small class="text-muted">{{ client.contact_email }}</small>
+                            </td>
+                            <td>
+                                {% if client.frps %}
+                                <div class="d-flex flex-wrap gap-1">
+                                    {% for frp in client.frps %}
+                                    <span class="badge bg-info">
+                                        {{ frp.number }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <span class="text-muted">Aucun FRP</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editClientModal{{ client.id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-info" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#linkFrpModal{{ client.id }}">
+                                        <i class="fas fa-link"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#deleteClientModal{{ client.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nouveau client -->
+<div class="modal fade" id="newClientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus me-2"></i>
+                    Nouveau client
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('add_client') }}">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Nom du client</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="account_number" class="form-label">Numéro de compte</label>
+                            <input type="text" class="form-control" id="account_number" name="account_number" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="address" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="contact_name" class="form-label">Nom du contact</label>
+                            <input type="text" class="form-control" id="contact_name" name="contact_name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="contact_email" class="form-label">Email du contact</label>
+                            <input type="email" class="form-control" id="contact_email" name="contact_email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="contact_phone" class="form-label">Téléphone du contact</label>
+                            <input type="tel" class="form-control" id="contact_phone" name="contact_phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="siret" class="form-label">Numéro SIRET</label>
+                            <input type="text" class="form-control" id="siret" name="siret" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modals d'édition pour chaque client -->
+{% for client in clients %}
+<div class="modal fade" id="editClientModal{{ client.id }}" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>
+                    Modifier le client
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('edit_client', client_id=client.id) }}">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="edit_name{{ client.id }}" class="form-label">Nom du client</label>
+                            <input type="text" class="form-control" id="edit_name{{ client.id }}" 
+                                   name="name" value="{{ client.name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_account_number{{ client.id }}" class="form-label">Numéro de compte</label>
+                            <input type="text" class="form-control" id="edit_account_number{{ client.id }}" 
+                                   name="account_number" value="{{ client.account_number }}" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="edit_address{{ client.id }}" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="edit_address{{ client.id }}" 
+                                   name="address" value="{{ client.address }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_contact_name{{ client.id }}" class="form-label">Nom du contact</label>
+                            <input type="text" class="form-control" id="edit_contact_name{{ client.id }}" 
+                                   name="contact_name" value="{{ client.contact_name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_contact_email{{ client.id }}" class="form-label">Email du contact</label>
+                            <input type="email" class="form-control" id="edit_contact_email{{ client.id }}" 
+                                   name="contact_email" value="{{ client.contact_email }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_contact_phone{{ client.id }}" class="form-label">Téléphone du contact</label>
+                            <input type="tel" class="form-control" id="edit_contact_phone{{ client.id }}" 
+                                   name="contact_phone" value="{{ client.contact_phone }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_siret{{ client.id }}" class="form-label">Numéro SIRET</label>
+                            <input type="text" class="form-control" id="edit_siret{{ client.id }}" 
+                                   name="siret" value="{{ client.siret }}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de liaison FRP -->
+<div class="modal fade" id="linkFrpModal{{ client.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-link me-2"></i>
+                    Lier un FRP
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('link_frp', client_id=client.id) }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="frp_number{{ client.id }}" class="form-label">Numéro FRP</label>
+                        <input type="text" class="form-control" id="frp_number{{ client.id }}" 
+                               name="frp_number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="frp_description{{ client.id }}" class="form-label">Description</label>
+                        <textarea class="form-control" id="frp_description{{ client.id }}" 
+                                  name="frp_description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Lier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de suppression -->
+<div class="modal fade" id="deleteClientModal{{ client.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-trash me-2"></i>
+                    Supprimer le client
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le client <strong>{{ client.name }}</strong> ?</p>
+                <p class="text-danger mb-0">Cette action est irréversible et supprimera également tous les FRP associés.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form method="POST" action="{{ url_for('delete_client', client_id=client.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<style>
+.avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem;
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.badge {
+    font-size: 0.875rem;
+    padding: 0.35em 0.65em;
+}
+</style>
+
+<script>
+document.getElementById('searchClient').addEventListener('keyup', function() {
+    let searchText = this.value.toLowerCase();
+    let table = document.querySelector('table');
+    let rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+        let row = rows[i];
+        let cells = row.getElementsByTagName('td');
+        let found = false;
+
+        for (let j = 0; j < cells.length; j++) {
+            let cell = cells[j];
+            if (cell.textContent.toLowerCase().indexOf(searchText) > -1) {
+                found = true;
+                break;
+            }
+        }
+
+        row.style.display = found ? '' : 'none';
+    }
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block styles %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 30px 30px;
+    }
+
+    .hero-content {
+        max-width: 600px;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .stats-section {
+        margin-top: -3rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--text-color);
+        opacity: 0.7;
+    }
+
+    .tickets-section {
+        margin-top: 3rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .ticket-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .ticket-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .ticket-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .ticket-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0;
+    }
+
+    .ticket-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .status-open {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+
+    .status-closed {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+
+    .ticket-meta {
+        display: flex;
+        gap: 1rem;
+        color: var(--text-color);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    .ticket-meta i {
+        margin-right: 0.5rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: var(--text-color);
+        opacity: 0.7;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- En-tête avec statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="number">{{ tickets|length }}</div>
+                <div class="label">Tickets totaux</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="number">{{ tickets|selectattr('status', 'equalto', 'open')|list|length }}</div>
+                <div class="label">Tickets ouverts</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="number">{{ tickets|selectattr('status', 'equalto', 'closed')|list|length }}</div>
+                <div class="label">Tickets résolus</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des tickets -->
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-list me-2"></i>Liste des tickets</h4>
+            <a href="{{ url_for('create_ticket') }}" class="btn btn-light">
+                <i class="fas fa-plus me-2"></i>Nouveau ticket
+            </a>
+        </div>
+        <div class="card-body p-0">
+            {% if tickets %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Numéro FRP</th>
+                            <th>Titre</th>
+                            <th>Client</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td>
+                                <span class="fw-bold">{{ ticket.ticket_number }}</span>
+                            </td>
+                            <td>{{ ticket.title }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user me-2 text-muted"></i>
+                                    {{ ticket.client_name }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="ticket-status {{ ticket.status }}">
+                                    {% if ticket.status == 'open' %}
+                                        <i class="fas fa-circle me-1"></i>Ouvert
+                                    {% elif ticket.status == 'in_progress' %}
+                                        <i class="fas fa-clock me-1"></i>En cours
+                                    {% else %}
+                                        <i class="fas fa-check me-1"></i>Résolu
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="far fa-calendar-alt me-2 text-muted"></i>
+                                    {{ ticket.created_at.strftime('%d/%m/%Y') }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('view_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if current_user.is_admin %}
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ ticket.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+
+                                {% if current_user.is_admin %}
+                                <!-- Modal de suppression -->
+                                <div class="modal fade" id="deleteModal{{ ticket.id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirmer la suppression</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir supprimer le ticket <strong>{{ ticket.ticket_number }}</strong> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <form action="{{ url_for('delete_ticket', ticket_id=ticket.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                <h5>Aucun ticket trouvé</h5>
+                <p class="text-muted">Commencez par créer un nouveau ticket</p>
+                <a href="{{ url_for('create_ticket') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Créer un ticket
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

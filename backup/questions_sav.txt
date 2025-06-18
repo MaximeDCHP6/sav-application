@@ -1,0 +1,153 @@
+QUESTIONS POUR LE DÉVELOPPEMENT DU LOGICIEL SAV ALDER
+=================================================
+
+1. INFORMATIONS DE BASE DES TICKETS
+----------------------------------
+- Quels sont les champs obligatoires pour un ticket ?
+Ils sont nombreux :
+N°FRP
+Date d'édition de la N°FRP
+Numéro de compte clients
+Mail de l'éxepditeur de la FRP
+Nom du clients
+Immatriculation du véhicule
+Si c'est un avoir ou un remplacement de pièce (peux aussi passer par un avoir)
+Référence de la pièce ou des pièces (normalement 4 pièces dufférentes max par FRP mais en programme possibilités de mettre plus de pièces)
+Quantité pour chaque référence
+N°de bl de chaque pièce
+Date d'éxpédition
+Prix par pièce
+Décote si il y a par pièce
+Remboursement des frais d'emballage ou non
+Montant des frais d'emballage
+Remboursement ou non des frais de port
+Montant des frais de port
+Montant total du remboursement (lié au données précédentes)
+Date de remplissage de la FRP
+Nom de la personne qui gère la FRP
+N° Facture
+Et savoir ce qu'on fait de la pièce :
+Plusieurs choix
+Le client renvoie la pièce
+Enlèvement par nos soins (Alder)
+Sans retour
+- Avez-vous des statuts prédéfinis pour les tickets ?
+Pas sur d'avoir compris la question mais je ne crois pas
+- Comment gérez-vous les pièces jointes (photos, documents) ?
+On les intégre, il peux y avoir tout type de fichiers (images, pdf, excel, mail etc...)
+
+2. GESTION DES PIÈCES
+--------------------
+- Comment identifiez-vous les pièces (référence, code-barres, etc.) ?
+Par référence
+- Avez-vous besoin de gérer les numéros de série ?
+Non pas besoin
+- Comment gérez-vous les pièces sous garantie ?
+Nous les remettons soit en stock si retour, c'est le travail des logisticiens, si sans retour le client jette la pièce
+Si pièce cassé, nous la jettons généralement pour obtenir un remboursement du transporteurs
+Ou nous pouvons mettre la pièce a dispo si litige fournisseurs, pour qu'il viennent la récupérer et nous faire un avoir, ce qui est assez rare
+
+3. PROCESSUS DE RETOUR
+---------------------
+- Quel est le processus complet d'un retour produit ?
+Le client nous envoi un pdf (notre document de FRP), par mail (outlook généralement), nous analysons la demande, nous estimons qui fait l'erreur etc
+Si besoin nous conseillons et essayons de l'aider, sinon nous remplissons la demande de retour (notre partie), ensuite nous la renvoyons par mail afin que le client
+sache que faire.
+Après soit on récupère la pièce soit le client la renvoie suivant ce qu'on lui a dit de faire sur la FRP
+Si la pièce revient, La logistqiue réceptionne la pièce et la controle en cas de casse il mettent des réserves
+Si c'est une simple erreur client il la réintègre en stock sinon il analyse le problème
+Ensuite si tout est ok nous donnons le document de FRP a notre comptabilité qui fait un avoir
+Si sans retour nous donnons directement le document FRP a la comptabilité qui fait un avoir
+- Avez-vous des délais spécifiques à respecter ?
+Non mais nous essayons d'avoir le moins de retard possible 1 semaine grand max
+- Comment gérez-vous les frais de port retour ?
+Comme dit précedemment suivant le fautif nous pouvons enlever la pièce par le biais de nos transporteurs (nous payons), soit le client gère le retour de la pièce (le client paye)
+Nous pouvons aussi s'arranger avec le client etc...
+4. INTÉGRATION PMI
+-----------------
+- Quelles données souhaitez-vous synchroniser avec PMI ?
+Pour l'instant je ne pense pas que cela soit obligatoire mais possible dans le futur
+- À quelle fréquence la synchronisation doit-elle se faire ?
+Si il fallait je dirais une a deux fois par jour
+- Avez-vous des champs spécifiques à PMI à conserver ?
+Non je ne pense pas
+
+5. RAPPORTS ET PDF
+-----------------
+- Quels types de rapports souhaitez-vous générer ?
+Remplissage de FRP
+- Avez-vous un modèle de PDF existant à suivre ?
+Oui il existe déja
+- Quelles statistiques sont importantes pour vous ?
+Un peu toutes, nous devons rendre des statistiques détaillées sur l'état du SAV le cout etc a notre direction régulièrement, plus il y a de données plus ils sont content
+
+6. GESTION DES LITIGES
+---------------------
+- Comment catégorisez-vous les différents types de litiges ?
+Nous analysons le fautif, si transporteur nous remplissons leur document et leur envoyons, idem pour le fournisseur nous remplissons de notre coté unexcel pour le suivi etc
+le but étant d'arréter cette manière et aussi l'intégrer dans le logiciel
+- Avez-vous des procédures spécifiques selon le type de litige ?
+Oui surtout les documents des fournisseur et transporteur si il en ont sinon nous renseignons toujours les mêmes infos sur notre excel
+- Comment suivez-vous les litiges avec les transporteurs ?
+Nous envoyons les documents comme dit précedemment et nous attendons leur réponse
+
+7. INTERFACE UTILISATEUR
+-----------------------
+- Combien d'utilisateurs utiliseront le système simultanément ?
+Au grand maximum 10
+- Avez-vous besoin de différents niveaux d'accès ?
+Bien sur c'est très important
+- Souhaitez-vous des raccourcis clavier pour les actions fréquentes ?
+Si possible oui sinon pas obligatoire
+
+8. STOCK ET INVENTAIRE
+---------------------
+- Comment gérez-vous les pièces retournées ?
+REmise en stock, mise en destruction de la pièce ou mis dans l'entrepot en attente d'analyse par la logistique ou le service technique
+- Avez-vous besoin de suivre l'état des pièces retournées ?
+Oui ce serait un bon point
+- Comment gérez-vous les pièces défectueuses ?
+Souvent nous les jetons a la demande du fournisseur ou le client la jette a notre demande si l'enlèvement coute plus cher que la pièce
+
+9. COMMUNICATION
+--------------
+- Avez-vous besoin d'envoyer des emails automatiques ?
+Si la fonctionnalité est la et programmable c'est sympa mais je ne veux pas pour l'instant que tout soit automatique, pourquoi pas le faire en le chosisissant pour chaque client ou non
+- Souhaitez-vous un système de notes internes ?
+Ce serait vraiment un gros plus
+- Comment communiquez-vous avec les clients ?
+Par mail, ou par téléphone
+
+10. ARCHIVAGE
+------------
+- Combien de temps gardez-vous les données ?
+Pour le moment via excel, indéfiniment
+- Avez-vous besoin d'un système d'archivage ?
+Pas forcément mais ca peux être un plus si cela peux aider a rendre le logiciel plus rapide et éviter de le surcharger
+- Souhaitez-vous pouvoir exporter les anciens tickets ?
+
+11. SÉCURITÉ
+-----------
+- Avez-vous des exigences particulières en matière de sécurité ?
+Non mais plus c'est sécurisé mieux le monde se porte j'imagine
+- Souhaitez-vous un système de journalisation des actions ?
+Oui c'est une bonne idée
+- Avez-vous besoin de sauvegardes automatiques ?
+Oui il ne faut surtout pas perdre les données
+
+12. PERSONNALISATION
+-------------------
+- Avez-vous des préférences de couleurs ou de style ?
+Non pas forcément, il faut rester professionels, Alder a des couleurs rouges et gris foncé, pas obligatoire non plus si tu a une idée
+- Souhaitez-vous pouvoir personnaliser certains champs ?
+Si possible bien sur
+- Avez-vous besoin de champs personnalisés selon le type de ticket ?
+Pourquoi pas
+
+
+ESPACE POUR VOS RÉPONSES
+=======================
+
+[Veuillez répondre aux questions ci-dessus en les numérotant de la même manière] 
+
+N'hésite pas a me poser encore des questions afin de mieux identifier nos besoins

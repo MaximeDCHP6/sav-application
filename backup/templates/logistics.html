@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Gestion des tickets</h5>
+                    <div class="btn-group">
+                        <a href="{{ url_for('create_ticket') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Nouveau ticket
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>N° Ticket</th>
+                                    <th>Client</th>
+                                    <th>Date de création</th>
+                                    <th>Type de retour</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ticket in tickets %}
+                                <tr>
+                                    <td>{{ ticket.ticket_number }}</td>
+                                    <td>{{ ticket.client.name }}</td>
+                                    <td>{{ ticket.created_at.strftime('%d/%m/%Y') }}</td>
+                                    <td>{{ ticket.return_type }}</td>
+                                    <td>
+                                        {% set total = ticket.products|length %}
+                                        {% set recu = ticket.products|map(attribute='receptions')|map('sum', attribute='quantity_received')|sum %}
+                                        {{ recu }}/{{ total }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if ticket.status == 'completed' else 'warning' if ticket.status == 'in_progress' else 'secondary' }}">
+                                            {{ ticket.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('view_ticket', ticket_id=ticket.id) }}" class="btn btn-outline-primary btn-sm" title="Voir"><i class="bi bi-eye"></i></a>
+                                        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#receptionModal{{ ticket.id }}" title="Réceptionner">
+                                            <i class="bi bi-box-arrow-in-down"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal de réception pour ce ticket -->
+                                <div class="modal fade" id="receptionModal{{ ticket.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Réceptionner les produits du ticket {{ ticket.ticket_number }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ url_for('receive_product') }}" method="POST">
+                                                    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Référence</th>
+                                                                <th>Quantité attendue</th>
+                                                                <th>Quantité reçue</th>
+                                                                <th>Réceptionner</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for product in ticket.products %}
+                                                            <tr>
+                                                                <td>{{ product.product_ref }}</td>
+                                                                <td>{{ product.quantity }}</td>
+                                                                <td>
+                                                                    {% set total_received = product.receptions|sum(attribute='quantity_received') %}
+                                                                    {{ total_received }}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group mb-2">
+                                                                        <input type="number" class="form-control" name="quantity_{{ product.id }}" min="1" max="{{ product.quantity - total_received }}" placeholder="Qté">
+                                                                        <select class="form-select" name="condition_{{ product.id }}">
+                                                                            <option value="bon">Bon état</option>
+                                                                            <option value="rayé">Rayé</option>
+                                                                            <option value="cassé">Cassé</option>
+                                                                            <option value="manquant">Manquant</option>
+                                                                            <option value="autre">Autre</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <textarea class="form-control mb-2" name="notes_{{ product.id }}" rows="1" placeholder="Notes"></textarea>
+                                                                    <!-- Historique des réceptions -->
+                                                                    {% if product.receptions %}
+                                                                    <div class="mt-1 small">
+                                                                        <strong>Historique :</strong>
+                                                                        <ul class="list-unstyled mb-0">
+                                                                            {% for log in product.receptions|sort(attribute='reception_date', reverse=true) %}
+                                                                            <li>
+                                                                                {{ log.reception_date.strftime('%d/%m/%Y %H:%M') }} - {{ log.quantity_received }} reçus - {{ log.condition }} {% if log.notes %}({{ log.notes }}){% endif %} par {{ log.user.username }}
+                                                                            </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="submit" class="btn btn-primary">Valider les réceptions</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucun ticket trouvé</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Comptabilité</h2>
+    
+    <!-- Résumé -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Montant Total</h5>
+                    <p class="card-text h3">{{ "%.2f"|format(total_amount) }} €</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Montant Payé</h5>
+                    <p class="card-text h3">{{ "%.2f"|format(paid_amount) }} €</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Montant En Attente</h5>
+                    <p class="card-text h3">{{ "%.2f"|format(pending_amount) }} €</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Détails par client -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Détails par client</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Total</th>
+                            <th>Payé</th>
+                            <th>En Attente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>{{ client.name }}</td>
+                            <td>{{ "%.2f"|format(client.total) }} €</td>
+                            <td>{{ "%.2f"|format(client.paid) }} €</td>
+                            <td>{{ "%.2f"|format(client.pending) }} €</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

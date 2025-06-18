@@ -1,0 +1,183 @@
+# Environnement Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environnement virtuel
+venv/
+ENV/
+env/
+.env
+
+# Base de données
+*.db
+*.sqlite
+*.sqlite3
+
+# Fichiers de logs
+*.log
+logs/
+log/
+
+# Fichiers de cache
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Fichiers de configuration
+instance/
+.webassets-cache
+.env
+.env.*
+
+# Fichiers de sauvegarde
+backups/
+*.bak
+*.backup
+*~
+
+# Fichiers de médias
+uploads/
+media/
+static/uploads/
+
+# Fichiers IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Fichiers de dépendances
+node_modules/
+bower_components/
+
+# Fichiers de build
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.dylib
+*.dll
+
+# Fichiers de test
+.coverage
+.tox/
+.nox/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Fichiers de documentation
+docs/_build/
+site/
+
+# Fichiers de déploiement
+*.war
+*.ear
+*.jar
+*.class
+*.dex
+*.apk
+*.ipa
+*.app
+*.exe
+*.msi
+*.dmg
+*.deb
+*.rpm
+*.zip
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tbz2
+*.tar.xz
+*.txz
+*.tar.lz
+*.tlz
+*.tar.lzma
+*.tlzma
+*.tar.lzo
+*.tzo
+*.tar.lzip
+*.tlzip
+*.tar.lzop
+*.tlzop
+*.tar.lrz
+*.tlrz
+*.tar.lz4
+*.tlz4
+*.tar.zst
+*.tzst
+*.tar.zstd
+*.tzstd
+*.tar.z
+*.tz
+*.tar.Z
+*.tZ
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tbz2
+*.tar.xz
+*.txz
+*.tar.lz
+*.tlz
+*.tar.lzma
+*.tlzma
+*.tar.lzo
+*.tzo
+*.tar.lzip
+*.tlzip
+*.tar.lzop
+*.tlzop
+*.tar.lrz
+*.tlrz
+*.tar.lz4
+*.tlz4
+*.tar.zst
+*.tzst
+*.tar.zstd
+*.tzstd
+*.tar.z
+*.tz
+*.tar.Z
+*.tZ
+
+# Fichiers temporaires
+*.tmp
+*.temp
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de sauvegarde
+*.zip
+*.bak 

@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}Recherche de tickets{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Recherche avancée de tickets</h3>
+                </div>
+                <div class="card-body">
+                    {% from "components/search_form.html" import search_form %}
+                    {{ search_form(form_id='ticket-search-form', action=url_for('search_tickets')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Résultats de recherche -->
+    <div class="row mt-4" id="search-results" style="display: none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Résultats de la recherche</h3>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" id="export-csv">
+                            <i class="fas fa-file-csv"></i> Exporter CSV
+                        </button>
+                        <button type="button" class="btn btn-danger" id="export-pdf">
+                            <i class="fas fa-file-pdf"></i> Exporter PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>N° Ticket</th>
+                                    <th>Client</th>
+                                    <th>Type</th>
+                                    <th>Statut</th>
+                                    <th>Date création</th>
+                                    <th>Montant total</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-body">
+                                <!-- Les résultats seront injectés ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Pagination des résultats">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- La pagination sera injectée ici -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('ticket-search-form');
+    const resultsDiv = document.getElementById('search-results');
+    const resultsBody = document.getElementById('results-body');
+    const pagination = document.getElementById('pagination');
+    const exportCsvBtn = document.getElementById('export-csv');
+    const exportPdfBtn = document.getElementById('export-pdf');
+
+    let currentPage = 1;
+    let totalPages = 1;
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('fr-FR', {
+            style: 'currency',
+            currency: 'EUR'
+        }).format(amount);
+    }
+
+    function updatePagination(page, total) {
+        pagination.innerHTML = '';
+        
+        // Bouton précédent
+        const prevLi = document.createElement('li');
+        prevLi.className = `page-item ${page === 1 ? 'disabled' : ''}`;
+        prevLi.innerHTML = `
+            <a class="page-link" href="#" data-page="${page - 1}">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+        `;
+        pagination.appendChild(prevLi);
+
+        // Pages
+        for (let i = 1; i <= total; i++) {
+            const li = document.createElement('li');
+            li.className = `page-item ${i === page ? 'active' : ''}`;
+            li.innerHTML = `
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+            `;
+            pagination.appendChild(li);
+        }
+
+        // Bouton suivant
+        const nextLi = document.createElement('li');
+        nextLi.className = `page-item ${page === total ? 'disabled' : ''}`;
+        nextLi.innerHTML = `
+            <a class="page-link" href="#" data-page="${page + 1}">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        `;
+        pagination.appendChild(nextLi);
+
+        // Gestionnaires d'événements pour la pagination
+        pagination.querySelectorAll('.page-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const newPage = parseInt(this.dataset.page);
+                if (newPage >= 1 && newPage <= total) {
+                    currentPage = newPage;
+                    searchTickets();
+                }
+            });
+        });
+    }
+
+    function displayResults(data) {
+        resultsBody.innerHTML = '';
+        
+        if (data.tickets.length === 0) {
+            resultsBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center">
+                        Aucun ticket trouvé pour cette recherche
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        data.tickets.forEach(ticket => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${ticket.ticket_number}</td>
+                <td>
+                    ${ticket.client_name}<br>
+                    <small class="text-muted">${ticket.account_number}</small>
+                </td>
+                <td>${ticket.return_type}</td>
+                <td>
+                    <span class="badge bg-${getStatusColor(ticket.status)}">
+                        ${ticket.status}
+                    </span>
+                </td>
+                <td>${formatDate(ticket.created_at)}</td>
+                <td>${formatCurrency(ticket.total_refund)}</td>
+                <td>
+                    <a href="/tickets/${ticket.id}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </td>
+            `;
+            resultsBody.appendChild(row);
+        });
+
+        updatePagination(data.current_page, data.total_pages);
+        resultsDiv.style.display = 'block';
+    }
+
+    function getStatusColor(status) {
+        switch(status) {
+            case 'en_attente': return 'warning';
+            case 'valide': return 'success';
+            case 'refuse': return 'danger';
+            default: return 'secondary';
+        }
+    }
+
+    async function searchTickets() {
+        const formData = new FormData(form);
+        formData.append('page', currentPage);
+        
+        try {
+            const response = await fetch('/api/tickets/search', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error('Erreur lors de la recherche');
+            }
+            
+            const data = await response.json();
+            displayResults(data);
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Une erreur est survenue lors de la recherche');
+        }
+    }
+
+    async function exportResults(format) {
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch(`/api/tickets/export/${format}`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Erreur lors de l'export ${format}`);
+            }
+            
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tickets_export.${format}`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert(`Une erreur est survenue lors de l'export ${format}`);
+        }
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        currentPage = 1;
+        searchTickets();
+    });
+
+    exportCsvBtn.addEventListener('click', () => exportResults('csv'));
+    exportPdfBtn.addEventListener('click', () => exportResults('pdf'));
+});
+</script>
+{% endblock %} 

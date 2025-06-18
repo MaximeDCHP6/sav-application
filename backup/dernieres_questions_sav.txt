@@ -1,0 +1,91 @@
+DERNIÈRES QUESTIONS POUR LE LOGICIEL SAV ALDER
+===========================================
+
+1. DASHBOARD (Page d'accueil)
+----------------------------
+Que souhaitez-vous voir en premier sur la page d'accueil ?
+- Liste des FRP en cours
+- Statistiques importantes
+- Alertes
+- Autre chose ?
+
+2. FRP (Fiche Retour Produit)
+----------------------------
+Pour la gestion des FRP :
+- Qui peut modifier les numéros de FRP ?
+Les gestionnaires du sav 
+- Voulez-vous une validation avant envoi au client ?
+Oui bien sur pour éviter les erreurs
+- Voulez-vous pouvoir sauvegarder des FRP en cours ?
+Oui bien évidemment
+
+3. DOCUMENTS
+-----------
+Pour les documents (FRP, litiges) :
+- Comment voulez-vous importer les anciens documents ?
+Aucune idée je te laisse gérer
+- Voulez-vous pouvoir scanner des documents papier ?
+Oui tout a fait
+- Voulez-vous pouvoir chercher dans les documents ?
+Oui bien sur
+
+4. EXPORT
+--------
+Pour l'export des données :
+- Quels formats voulez-vous (Excel, PDF, CSV) ?
+CSV ou excel ou pdf au choix
+- Voulez-vous des exports automatiques ?
+Oui mais en fonctionnalité je ne veux pas qu'il soit vraiment automatiques
+- Quelles données voulez-vous pouvoir exporter ?
+Tout ce que tu juge important
+
+5. RECHERCHE
+-----------
+Pour la recherche :
+- Quels critères sont importants pour vous ?
+Numéro de compte client
+Numéro de FRP
+Référence de la pièce
+- Voulez-vous des filtres avancés ?
+Oui pourquoi pas
+- Voulez-vous sauvegarder des recherches fréquentes ?
+Oui une liste des DERNIÈRES
+
+6. CLIENTS
+---------
+Pour la gestion des clients :
+- Voulez-vous voir l'historique des FRP par client ?
+Oui ce serait parfait
+- Voulez-vous des statistiques par client ?
+Oui bien sur
+- Voulez-vous des notes par client ?
+Oui bien sur
+
+7. RAPPORTS
+----------
+Pour les rapports automatiques :
+- À quelle fréquence voulez-vous les rapports ?
+1 fois par semaines
+- Quels types de rapports voulez-vous ?
+Rapport complet
+- Qui doit recevoir ces rapports ?
+Les administrateurs
+
+8. SAUVEGARDE
+------------
+Pour la sauvegarde :
+- À quelle fréquence voulez-vous les sauvegardes ?
+Au minimum 2 fois par jour
+- Où voulez-vous stocker les sauvegardes ?
+Peu importe le plus efficace et fiable
+- Avez-vous des besoins particuliers en sécurité ?
+Non mais si c'est sécurisé tant mieux
+
+
+ESPACE POUR VOS RÉPONSES
+=======================
+
+[Veuillez répondre aux questions ci-dessus en les numérotant de la même manière] 
+
+Je dois évidemment pouvoir créer des clients de A a Z avec toutes les données d'un client, mais également créer des fournisseurs ou des transporteurs ce qui est logique
+Si tu as des questions n'hésite pas

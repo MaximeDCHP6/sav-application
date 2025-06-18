@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block styles %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 30px 30px;
+    }
+
+    .hero-content {
+        max-width: 600px;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .stats-section {
+        margin-top: -3rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--text-color);
+        opacity: 0.7;
+    }
+
+    .tickets-section {
+        margin-top: 3rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .ticket-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .ticket-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .ticket-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .ticket-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0;
+    }
+
+    .ticket-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .status-open {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+
+    .status-closed {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+
+    .ticket-meta {
+        display: flex;
+        gap: 1rem;
+        color: var(--text-color);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    .ticket-meta i {
+        margin-right: 0.5rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: var(--text-color);
+        opacity: 0.7;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        <i class="fas fa-tachometer-alt me-2"></i>Tableau de bord SAV
+                    </h1>
+                    <p class="card-text">Bienvenue dans votre espace de gestion des retours et avoirs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistiques globales -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Tickets en cours</h5>
+                    <h2 class="card-text" id="activeTickets">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Avoirs en attente</h5>
+                    <h2 class="card-text" id="pendingCreditNotes">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total des avoirs</h5>
+                    <h2 class="card-text" id="totalCreditNotes">0,00 €</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Anomalies</h5>
+                    <h2 class="card-text" id="anomalies">0</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphiques -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Évolution des tickets</h5>
+                    <canvas id="ticketsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Répartition par type de retour</h5>
+                    <canvas id="returnTypesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertes et actions rapides -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bell me-2"></i>Alertes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="alertsList">
+                        <!-- Les alertes seront ajoutées ici dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bolt me-2"></i>Actions rapides
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="{{ url_for('create_ticket') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-plus me-2"></i>Nouveau ticket
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ url_for('logistics') }}" class="btn btn-info w-100">
+                                <i class="fas fa-truck me-2"></i>Logistique
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ url_for('accounting') }}" class="btn btn-success w-100">
+                                <i class="fas fa-file-invoice-dollar me-2"></i>Comptabilité
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ url_for('statistics') }}" class="btn btn-warning w-100">
+                                <i class="fas fa-chart-bar me-2"></i>Statistiques
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Derniers tickets -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-history me-2"></i>Derniers tickets
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>N° Ticket</th>
+                                    <th>Client</th>
+                                    <th>Date de création</th>
+                                    <th>Type de retour</th>
+                                    <th>Statut</th>
+                                    <th>Total remboursé</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTicketsTable">
+                                <!-- Les tickets seront ajoutés ici dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Initialiser les graphiques
+const ticketsChart = new Chart(
+    document.getElementById('ticketsChart'),
+    {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Tickets créés',
+                data: [],
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+);
+
+const returnTypesChart = new Chart(
+    document.getElementById('returnTypesChart'),
+    {
+        type: 'pie',
+        data: {
+            labels: ['S', 'R', 'C'],
+            datasets: [{
+                data: [0, 0, 0],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    }
+);
+
+// Charger les données du tableau de bord
+function loadDashboardData() {
+    fetch('/dashboard-data')
+        .then(response => response.json())
+        .then(data => {
+            // Mettre à jour les statistiques
+            document.getElementById('activeTickets').textContent = data.stats.activeTickets;
+            document.getElementById('pendingCreditNotes').textContent = data.stats.pendingCreditNotes;
+            document.getElementById('totalCreditNotes').textContent = `${data.stats.totalCreditNotes.toFixed(2)} €`;
+            document.getElementById('anomalies').textContent = data.stats.anomalies;
+
+            // Mettre à jour le graphique d'évolution
+            ticketsChart.data.labels = data.evolution.labels;
+            ticketsChart.data.datasets[0].data = data.evolution.tickets;
+            ticketsChart.update();
+
+            // Mettre à jour le graphique des types de retour
+            returnTypesChart.data.datasets[0].data = [
+                data.returnTypes.S,
+                data.returnTypes.R,
+                data.returnTypes.C
+            ];
+            returnTypesChart.update();
+
+            // Mettre à jour les alertes
+            const alertsList = document.getElementById('alertsList');
+            alertsList.innerHTML = '';
+            data.alerts.forEach(alert => {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${alert.type} mb-2`;
+                alertDiv.innerHTML = `
+                    <i class="fas ${alert.icon} me-2"></i>
+                    ${alert.message}
+                    ${alert.link ? `<a href="${alert.link}" class="alert-link">Voir</a>` : ''}
+                `;
+                alertsList.appendChild(alertDiv);
+            });
+
+            // Mettre à jour la liste des derniers tickets
+            const ticketsTable = document.getElementById('recentTicketsTable');
+            ticketsTable.innerHTML = '';
+            data.recentTickets.forEach(ticket => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${ticket.ticket_number}</td>
+                    <td>${ticket.client_name}</td>
+                    <td>${ticket.created_at}</td>
+                    <td>${ticket.return_type}</td>
+                    <td>
+                        <span class="badge ${ticket.status === 'valide' ? 'bg-success' : ticket.status === 'en_attente' ? 'bg-warning' : 'bg-danger'}">
+                            ${ticket.status.replace('_', ' ')}
+                        </span>
+                    </td>
+                    <td>${ticket.total_refund.toFixed(2)} €</td>
+                    <td>
+                        <a href="/ticket/${ticket.id}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-eye me-1"></i>Voir
+                        </a>
+                    </td>
+                `;
+                ticketsTable.appendChild(tr);
+            });
+        });
+}
+
+// Charger les données au chargement de la page
+document.addEventListener('DOMContentLoaded', loadDashboardData);
+
+// Recharger les données toutes les 5 minutes
+setInterval(loadDashboardData, 300000);
+</script>
+{% endblock %} 

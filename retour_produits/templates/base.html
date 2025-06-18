@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestion des Retours{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #e63946;
+            --accent-color: #2b2b2b;
+            --text-color: #333333;
+            --light-gray: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px 8px 0 0 !important;
+            padding: 1rem 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-danger {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            font-weight: 600;
+            background-color: var(--light-gray);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .badge {
+            padding: 0.5em 0.8em;
+            font-weight: 500;
+        }
+
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.1);
+        }
+
+        .alert {
+            border-radius: 6px;
+            border: none;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Styles spécifiques pour les tickets */
+        .ticket-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .ticket-status.open {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .ticket-status.in_progress {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .ticket-status.closed {
+            background-color: #f5f5f5;
+            color: #616161;
+        }
+
+        /* Styles pour les statistiques */
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stats-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stats-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-card .label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .navbar-brand img {
+            height: 30px;
+            margin-right: 10px;
+        }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 8px 16px;
+            margin: 4px 0;
+            border-radius: 4px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background-color: #0d6efd;
+            color: white;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .btn-icon {
+            margin-right: 5px;
+        }
+        .ticket-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        .status-open {
+            background-color: #cff4fc;
+            color: #055160;
+        }
+        .status-closed {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .flash-message {
+            margin-bottom: 10px;
+            min-width: 300px;
+        }
+        .total-refund {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #198754;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-ticket-alt"></i>
+                Gestion des Retours
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i> Accueil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('create_ticket') }}">
+                            <i class="fas fa-plus me-1"></i> Nouveau Ticket
+                        </a>
+                    </li>
+                    {% if current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'manage_clients' %}active{% endif %}" href="{{ url_for('manage_clients') }}">
+                            <i class="fas fa-users me-2"></i>Clients
+                        </a>
+                    </li>
+                    {% if current_user.is_logistics %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'logistics' %}active{% endif %}" href="{{ url_for('logistics') }}">
+                            <i class="fas fa-truck me-2"></i>Logistique
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('accounting') }}">
+                            <i class="fas fa-file-invoice-dollar me-2"></i>Comptabilité
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('statistics') }}">
+                            <i class="fas fa-chart-bar me-2"></i>Statistiques
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('client_data') }}">
+                            <i class="fas fa-users me-2"></i>Données clients
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin' %}active{% endif %}" href="{{ url_for('admin') }}">
+                            <i class="fas fa-user-shield me-2"></i>Administration
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'logs' %}active{% endif %}" href="{{ url_for('logs') }}">
+                            <i class="fas fa-history me-2"></i>Logs système
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'actions_page' %}active{% endif %}" href="{{ url_for('actions_page') }}">
+                            <i class="fas fa-list me-2"></i>Actions utilisateurs
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-2"></i>{{ current_user.name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            {% if current_user.is_admin %}
+                            <a class="dropdown-item" href="{{ url_for('settings_page') }}">
+                                <i class="fas fa-cog me-2"></i>Paramètres
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            {% endif %}
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            {% if current_user.is_authenticated %}
+            <div class="col-md-2 sidebar">
+                <div class="list-group">
+                    <a href="{{ url_for('index') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'index' %}active{% endif %}">
+                        <i class="fas fa-home me-2"></i>Accueil
+                    </a>
+                    <a href="{{ url_for('create_ticket') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'create_ticket' %}active{% endif %}">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau ticket
+                    </a>
+                    <a href="{{ url_for('manage_clients') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'manage_clients' %}active{% endif %}">
+                        <i class="fas fa-users me-2"></i>Clients
+                    </a>
+                    <a href="{{ url_for('logistics') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'logistics' %}active{% endif %}">
+                        <i class="fas fa-truck me-2"></i>Logistique
+                    </a>
+                    <a href="{{ url_for('accounting') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'accounting' %}active{% endif %}">
+                        <i class="fas fa-file-invoice-dollar me-2"></i>Comptabilité
+                    </a>
+                    <a href="{{ url_for('statistics') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'statistics' %}active{% endif %}">
+                        <i class="fas fa-chart-bar me-2"></i>Statistiques
+                    </a>
+                    <a href="{{ url_for('client_data') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'client_data' %}active{% endif %}">
+                        <i class="fas fa-users me-2"></i>Données clients
+                    </a>
+                    {% if current_user.is_admin %}
+                    <a href="{{ url_for('admin') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'admin' %}active{% endif %}">
+                        <i class="fas fa-user-shield me-2"></i>Administration
+                    </a>
+                    <a href="{{ url_for('logs') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'logs' %}active{% endif %}">
+                        <i class="fas fa-history me-2"></i>Logs système
+                    </a>
+                    <a href="{{ url_for('actions_page') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'actions_page' %}active{% endif %}">
+                        <i class="fas fa-list me-2"></i>Actions utilisateurs
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="col-md-{% if current_user.is_authenticated %}10{% else %}12{% endif %} main-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show flash-message" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">Support Client &copy; {{ now.year }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Version 1.0.0</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

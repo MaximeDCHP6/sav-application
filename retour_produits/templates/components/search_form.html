@@ -1,0 +1,209 @@
+{% macro search_form(form_id='search-form', action='', method='GET') %}
+<form id="{{ form_id }}" action="{{ action }}" method="{{ method }}" class="search-form">
+    <div class="row g-3">
+        <!-- Informations client -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Informations client</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="account_number" class="form-label">Numéro de compte</label>
+                        <input type="text" class="form-control" id="account_number" name="account_number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="client_name" class="form-label">Nom du client</label>
+                        <input type="text" class="form-control" id="client_name" name="client_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="client_email" class="form-label">Email du client</label>
+                        <input type="email" class="form-control" id="client_email" name="client_email">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informations ticket -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Informations ticket</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="ticket_number" class="form-label">Numéro de ticket</label>
+                        <input type="text" class="form-control" id="ticket_number" name="ticket_number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status" multiple>
+                            <option value="en_attente">En attente</option>
+                            <option value="valide">Validé</option>
+                            <option value="refuse">Refusé</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="return_type" class="form-label">Type de retour</label>
+                        <select class="form-select" id="return_type" name="return_type" multiple>
+                            <option value="retour_client">Retour client</option>
+                            <option value="retour_magasin">Retour magasin</option>
+                            <option value="retour_garantie">Retour garantie</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails supplémentaires -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Détails supplémentaires</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="fault_attribution" class="form-label">Attribution de la faute</label>
+                        <select class="form-select" id="fault_attribution" name="fault_attribution">
+                            <option value="">Tous</option>
+                            <option value="erreur_alder">Erreur Alder</option>
+                            <option value="erreur_client">Erreur client</option>
+                            <option value="erreur_transporteur">Erreur transporteur</option>
+                            <option value="erreur_fournisseur">Erreur fournisseur</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="return_reason" class="form-label">Motif du retour</label>
+                        <select class="form-select" id="return_reason" name="return_reason">
+                            <option value="">Tous</option>
+                            <option value="erreur_client">Erreur client</option>
+                            <option value="litige_transport">Litige transport</option>
+                            <option value="non_conforme">Non conforme</option>
+                            <option value="retard">Retard</option>
+                            <option value="erreur_alder">Erreur Alder</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="has_attachments" name="has_attachments">
+                            <label class="form-check-label" for="has_attachments">
+                                Avec pièces jointes
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Période -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Période</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="date_range" class="form-label">Période prédéfinie</label>
+                                <select class="form-select" id="date_range" name="date_range">
+                                    <option value="">Personnalisée</option>
+                                    <option value="today">Aujourd'hui</option>
+                                    <option value="yesterday">Hier</option>
+                                    <option value="last_7_days">7 derniers jours</option>
+                                    <option value="last_30_days">30 derniers jours</option>
+                                    <option value="this_month">Ce mois</option>
+                                    <option value="last_month">Mois dernier</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="start_date" class="form-label">Date de début</label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="end_date" class="form-label">Date de fin</label>
+                                        <input type="date" class="form-control" id="end_date" name="end_date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="col-12 text-end">
+            <button type="reset" class="btn btn-secondary">
+                <i class="fas fa-undo"></i> Réinitialiser
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateRange = document.getElementById('date_range');
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+
+    dateRange.addEventListener('change', function() {
+        const today = new Date();
+        let start = new Date();
+        let end = new Date();
+
+        switch(this.value) {
+            case 'today':
+                start.setHours(0, 0, 0, 0);
+                end.setHours(23, 59, 59, 999);
+                break;
+            case 'yesterday':
+                start.setDate(today.getDate() - 1);
+                start.setHours(0, 0, 0, 0);
+                end.setDate(today.getDate() - 1);
+                end.setHours(23, 59, 59, 999);
+                break;
+            case 'last_7_days':
+                start.setDate(today.getDate() - 7);
+                start.setHours(0, 0, 0, 0);
+                end.setHours(23, 59, 59, 999);
+                break;
+            case 'last_30_days':
+                start.setDate(today.getDate() - 30);
+                start.setHours(0, 0, 0, 0);
+                end.setHours(23, 59, 59, 999);
+                break;
+            case 'this_month':
+                start.setDate(1);
+                start.setHours(0, 0, 0, 0);
+                end.setHours(23, 59, 59, 999);
+                break;
+            case 'last_month':
+                start.setMonth(today.getMonth() - 1);
+                start.setDate(1);
+                start.setHours(0, 0, 0, 0);
+                end.setMonth(today.getMonth());
+                end.setDate(0);
+                end.setHours(23, 59, 59, 999);
+                break;
+            default:
+                startDate.value = '';
+                endDate.value = '';
+                return;
+        }
+
+        startDate.value = start.toISOString().split('T')[0];
+        endDate.value = end.toISOString().split('T')[0];
+    });
+});
+</script>
+{% endmacro %} 

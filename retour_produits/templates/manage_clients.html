@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Gestion des Clients
+            </h5>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClientModal">
+                <i class="fas fa-plus me-2"></i>Nouveau Client
+            </button>
+        </div>
+        <div class="card-body">
+            <!-- Barre de recherche -->
+            <div class="mb-4">
+                <input type="text" class="form-control" id="searchClient" placeholder="Rechercher un client...">
+            </div>
+
+            <!-- Liste des clients -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>N° Compte</th>
+                            <th>Nom</th>
+                            <th>Contact</th>
+                            <th>SIRET</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>{{ client.account_number }}</td>
+                            <td>{{ client.name }}</td>
+                            <td>
+                                {{ client.contact_name }}<br>
+                                <small class="text-muted">{{ client.contact_email }}</small>
+                            </td>
+                            <td>{{ client.siret }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" onclick="editClient({{ client.id }})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteClient({{ client.id }})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout Client -->
+<div class="modal fade" id="addClientModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouveau Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addClientForm" action="{{ url_for('add_client') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Numéro de compte *</label>
+                        <input type="text" class="form-control" name="account_number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nom *</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Adresse *</label>
+                        <textarea class="form-control" name="address" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nom du contact *</label>
+                        <input type="text" class="form-control" name="contact_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email du contact *</label>
+                        <input type="email" class="form-control" name="contact_email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Téléphone du contact *</label>
+                        <input type="tel" class="form-control" name="contact_phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">SIRET *</label>
+                        <input type="text" class="form-control" name="siret" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Édition Client -->
+<div class="modal fade" id="editClientModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editClientForm" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Numéro de compte *</label>
+                        <input type="text" class="form-control" name="account_number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nom *</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Adresse *</label>
+                        <textarea class="form-control" name="address" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nom du contact *</label>
+                        <input type="text" class="form-control" name="contact_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email du contact *</label>
+                        <input type="email" class="form-control" name="contact_email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Téléphone du contact *</label>
+                        <input type="tel" class="form-control" name="contact_phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">SIRET *</label>
+                        <input type="text" class="form-control" name="siret" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmation Suppression -->
+<div class="modal fade" id="deleteClientModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer ce client ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form id="deleteClientForm" method="POST">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Recherche de clients
+    document.getElementById('searchClient').addEventListener('keyup', function() {
+        const searchText = this.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchText) ? '' : 'none';
+        });
+    });
+
+    // Édition d'un client
+    function editClient(clientId) {
+        fetch(`/api/client/${clientId}`)
+            .then(response => response.json())
+            .then(client => {
+                const form = document.getElementById('editClientForm');
+                form.action = `/client/${clientId}/edit`;
+                
+                form.querySelector('[name="account_number"]').value = client.account_number;
+                form.querySelector('[name="name"]').value = client.name;
+                form.querySelector('[name="address"]').value = client.address;
+                form.querySelector('[name="contact_name"]').value = client.contact_name;
+                form.querySelector('[name="contact_email"]').value = client.contact_email;
+                form.querySelector('[name="contact_phone"]').value = client.contact_phone;
+                form.querySelector('[name="siret"]').value = client.siret;
+                
+                new bootstrap.Modal(document.getElementById('editClientModal')).show();
+            });
+    }
+
+    // Suppression d'un client
+    function deleteClient(clientId) {
+        const form = document.getElementById('deleteClientForm');
+        form.action = `/client/${clientId}/delete`;
+        new bootstrap.Modal(document.getElementById('deleteClientModal')).show();
+    }
+</script>
+{% endblock %} 

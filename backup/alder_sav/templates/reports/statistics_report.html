@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2cm;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2cm;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5cm;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            margin: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1cm;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .summary {
+            margin-top: 2cm;
+            padding: 1cm;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .summary h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .chart {
+            margin: 2cm 0;
+            text-align: center;
+        }
+        
+        .chart img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .footer {
+            margin-top: 2cm;
+            text-align: center;
+            font-size: 0.8em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ title }}</h1>
+        <p>Généré le {{ generated_at }}</p>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Métrique</th>
+                <th>Valeur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in data %}
+            <tr>
+                <td>{{ stat.Catégorie }}</td>
+                <td>{{ stat.Métrique }}</td>
+                <td>{{ stat.Valeur }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="summary">
+        <h2>Analyse</h2>
+        {% for category in data|groupby('Catégorie') %}
+        <h3>{{ category.grouper }}</h3>
+        <ul>
+            {% for stat in category.list %}
+            <li>{{ stat.Métrique }} : {{ stat.Valeur }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+    
+    {% if charts %}
+    <div class="chart">
+        <h2>Graphiques</h2>
+        {% for chart in charts %}
+        <img src="{{ chart }}" alt="Graphique {{ loop.index }}">
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="footer">
+        <p>© 2024 Alder SAV - Tous droits réservés</p>
+    </div>
+</body>
+</html> 

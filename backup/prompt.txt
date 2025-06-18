@@ -1,0 +1,121 @@
+Voici les fonctionnalités nouvelle, les choses à modifier ou améliorer, avant toute chose je veux que quand tu effectue ce travail tu vérifie que les fichiers ne sont pas déjà existant, il t'arrive parfois de faire des doublons au lieu de modifier des choses déjà existantes.
+
+Voici :
+
+Création de FRP [Ticket] :
+
+Il faut quelques améliorations :
+
+-Dans création de ticket il faut que l'on puisse choisir à qui attribuer la faute (erreur alder, erreur client, erreur transporteur, erreur fournisseur)
+
+-Dans création ticket il faut que l'on puisse choisir le motif du retour (erreur client, litige transport, non conforme, retard, erreur alder) et que l'on puisse écrire des informations à propos de cela si besoin
+
+-Le total remboursé s'affiche au début mais le chiffre finit par disparaître (même problème dans la consultation des tickets
+
+-Possibilité de joindre des fichiers à la frp (photos, pdf, mail Outlook, etc...) et qu'il puisse être modifier et afficher dans touts les autres onglets nécessaires (consultations tickets, logistique, etc...)
+
+Consultation des tickets :
+
+-Il faut que toutes les informations soient affiches dans la consultation
+
+-Il faut que l'on puisse rechercher par numéro de frp afin de faciliter la consultation
+
+-Il faut que l'on puisse rechercher par numéro de compte client afin de faciliter la consultation
+
+-Il faut que l'on puisse rechercher par date de création du ticket afin de faciliter la consultation
+
+-Il faut que l'on puisse rechercher par statut du ticket afin de faciliter la consultation
+
+Nouvel onglet à gauche :
+
+Comptabilité :
+
+Pour expliquer leur rôle :
+
+Ils ont pour rôle de faire les avoir suite au piece reçu, une fois que nous leur transférons une frp ils doivent faire un avoir (déjà un logiciel pour ca) et ensuite il doivent noter le numéro d'avoir ma date de l'avoir et valide que l'avoir à bien été effectué.
+
+Je te laisse travailler tout seul dessus.
+
+Si tu as des idées en plus n'hésite pas.
+
+Il fait aussi quil puisse rechercher les frp comme pour la consultation des tickets.
+
+Pour la logistique :
+
+Il faut que l'on puisse rechercher par numéro de frp afin de faciliter la consultation
+
+-Il faut que l'on puisse rechercher par numéro de compte client afin de faciliter la consultation
+
+-Il faut que l'on puisse rechercher par date de création du ticket afin de faciliter la consultation
+
+-Il faut que l'on puisse rechercher par statut du ticket afin de faciliter la consultation
+
+Il faut que la logistique puisse faire leur travail facilement qu'il puisse voir les pièces manquantes par frp notes des infos dessus aussi.
+
+Bien sur tu dois te repiquer sur ce qui a déjà été fait.
+
+Nouvel onglet à gauche :
+
+Statistiques :
+
+Explication :
+
+L'onglet statistiques est fait pour retrouver toutes les statistiques sur les frp, sur leur coût, en effectuant des tris sur ce qui nous intéressent.
+
+Il faut aussi pouvoir trier par date, mois, année, période personnalisé.
+
+Le plus de statistiques possibles à des fins d'analyse.
+
+Nouvel onglet a gauche :
+
+Données clients :
+
+Explication :
+
+L'onglet données client doit permettre d'afficher un tableau de bord du client en le recherchant par son numéro, il doit afficher toutes ses statistiques, une liste des ses frp etc...
+
+Page d'accueil :
+
+Suite au nombreux changements, la page d'accueil n'est plus moderne, elle doit plus ressembler à un tableau de bord global du sav.
+
+Nouvelles fonctionnalités :
+
+Il doit y avoir une alerte visuel cliquant qui s'affiche quand il y a une anomalie, du type quantité de pièce recu différente de celle attendue ou piece recu casse par notre logistique car nous devons pouvoir gérer le probleme et alerter le client rapidement.
+
+Nouvelles fonctionnalités :
+
+LOGS :
+
+L'administrateur doit pouvoir avoir accès aux logs du programme via un onglet à gauche.
+
+Nouvelles fonctionnalités :
+
+Actions :
+
+L'administrateur doit avoir un autre onglet à gauche avec la liste des actions effectués par les utilisateurs, il doit pouvoir rechercher par date et par utilisateur du programme.
+
+Nouvelles fonctionnalités :
+
+La possibilité d'avoir des paramètres, la ou on va pour déconnexion, avoir des parametres afin de gérer l'application, je compte sur toi la dessus tu peux ajouter les parametres que ru souhaites.
+
+Ensuite grosse partie :
+
+Base de données :
+
+J'ai vu que tu supprimais souvent la base de données pour mettre à jour le programme, tu te doute bien que ca n'est pas viable.
+
+Donc :
+
+-Modification de la base de données pour qu'elle accueille les mises à jour sans devoir se supprimer
+
+-Archive de la base de données se mettant à jour toutes les heures
+
+-Protection de la base de données au maximum elle ne doit pas pouvoir se supprimer accidentellement
+
+Une fois tout cela effectué, fais moi un débbugage complet du programme, je veux que tu aille chercher dans les moindres recoins et que tu fasse une analyse complète.
+
+Par du principe que tu a mon accord pour tout ce que tu veux faire pas besoin de me demander, cependant comme je t'ai dit au départ tu ne dois pas créer des doublons voir plus et surtout tu ne dois pas détériorer les fonctionnalités déjà existantes
+
+Avant tout ca creer une copie du programme, au cas où il y a des problèmes nous pourrons revenir en arrière.
+
+A toi de jouer 

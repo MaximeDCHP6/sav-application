@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm text-center">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-sign-out-alt fa-3x text-primary mb-3"></i>
+                        <h4 class="mb-3">Déconnexion réussie</h4>
+                        <p class="text-muted">
+                            Vous avez été déconnecté avec succès du système de gestion des retours produits.
+                        </p>
+                    </div>
+                    <div class="d-grid">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Se reconnecter
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer bg-light py-3">
+                    <small class="text-muted">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Merci d'avoir utilisé notre système
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

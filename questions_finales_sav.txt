@@ -1,0 +1,56 @@
+QUESTIONS FINALES POUR LA CONCEPTION DU LOGICIEL SAV ALDER
+=====================================================
+
+1. DASHBOARD
+-----------
+- Quelles informations souhaitez-vous voir en priorité sur le dashboard ?
+- Voulez-vous des filtres rapides (par date, par type de FRP, par statut) ?
+- Souhaitez-vous des alertes visuelles pour les FRP en attente ?
+
+2. GESTION DES FRP
+-----------------
+- Pour la modification des numéros FRP, qui doit avoir cette autorisation ?
+- Souhaitez-vous un système de validation avant l'envoi au client ?
+- Voulez-vous un système de brouillon pour les FRP en cours de rédaction ?
+
+3. INTÉGRATION DOCUMENTS
+-----------------------
+- Comment souhaitez-vous gérer l'import des documents existants (FRP, litiges) ?
+- Voulez-vous un système de numérisation des documents papier ?
+- Souhaitez-vous un système de recherche dans les documents ?
+
+4. EXPORT DE DONNÉES
+-------------------
+- Dans quels formats souhaitez-vous exporter les données (Excel, PDF, CSV) ?
+- Avez-vous besoin d'exports automatiques périodiques ?
+- Quelles données doivent être exportables ?
+
+5. RECHERCHE ET FILTRES
+----------------------
+- Quels critères de recherche sont essentiels pour vous ?
+- Souhaitez-vous des filtres avancés ?
+- Voulez-vous pouvoir sauvegarder des recherches fréquentes ?
+
+6. GESTION DES CLIENT
+--------------------
+- Souhaitez-vous un historique des FRP par client ?
+- Voulez-vous des statistiques par client ?
+- Avez-vous besoin d'un système de notes par client ?
+
+7. RAPPORTS AUTOMATIQUES
+-----------------------
+- À quelle fréquence souhaitez-vous recevoir les rapports automatiques ?
+- Quels types de rapports automatiques sont nécessaires ?
+- Qui doit recevoir ces rapports ?
+
+8. SAUVEGARDE ET SÉCURITÉ
+------------------------
+- À quelle fréquence souhaitez-vous les sauvegardes ?
+- Où souhaitez-vous stocker les sauvegardes ?
+- Avez-vous des exigences particulières pour la sécurité des données ?
+
+
+ESPACE POUR VOS RÉPONSES
+=======================
+
+[Veuillez répondre aux questions ci-dessus en les numérotant de la même manière] 

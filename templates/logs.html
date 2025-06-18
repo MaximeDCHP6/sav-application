@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Logs système</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Niveau</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.split(' - ')[0] }}</td>
+                            <td>
+                                {% set level = log.split(' - ')[1].split(':')[0] if ' - ' in log and ':' in log.split(' - ')[1] else 'INFO' %}
+                                <span class="badge {% if level == 'ERROR' %}bg-danger{% elif level == 'WARNING' %}bg-warning{% else %}bg-info{% endif %}">
+                                    {{ level }}
+                                </span>
+                            </td>
+                            <td>{{ log.split(' - ')[-1] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
