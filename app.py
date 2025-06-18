@@ -13,7 +13,7 @@ from functools import wraps
 from io import BytesIO
 
 from extensions import db, login_manager
-from models import User, Client, Ticket, Product, Message, ReceptionLog, Attachment, UserAction
+from models import User, Client, Ticket, Product, Message, ReceptionLog, Attachment, UserAction, Settings
 from notifications import init_mail, notify_new_ticket, notify_status_change, notify_anomaly
 from config import Config
 
@@ -1405,30 +1405,6 @@ def create_app():
         )
         db.session.add(action)
         db.session.commit()
-
-    class Settings(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        company_name = db.Column(db.String(100), default='ALDER')
-        company_email = db.Column(db.String(100), default='contact@alder.fr')
-        backup_frequency = db.Column(db.Integer, default=1)  # heures
-        backup_retention = db.Column(db.Integer, default=30)  # jours
-        notification_email = db.Column(db.String(100))
-        notify_new_ticket = db.Column(db.Boolean, default=True)
-        notify_status_change = db.Column(db.Boolean, default=True)
-        notify_anomaly = db.Column(db.Boolean, default=True)
-        session_timeout = db.Column(db.Integer, default=30)  # minutes
-        max_login_attempts = db.Column(db.Integer, default=5)
-        tickets_per_page = db.Column(db.Integer, default=25)
-        date_format = db.Column(db.String(10), default='DD/MM/YYYY')
-
-        @classmethod
-        def get_settings(cls):
-            settings = cls.query.first()
-            if not settings:
-                settings = cls()
-                db.session.add(settings)
-                db.session.commit()
-            return settings
 
     @app.route('/settings')
     @admin_required
