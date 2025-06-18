@@ -1309,6 +1309,27 @@ def create_app():
             app.logger.error(f"Erreur lors de l'export PDF: {str(e)}")
             return jsonify({'error': 'Une erreur est survenue lors de l\'export'}), 500
 
+    class UserAction(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+        user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+        user = db.relationship('User', backref='actions')
+        action_type = db.Column(db.String(20))  # create, update, delete, login, logout
+        module = db.Column(db.String(50))  # tickets, users, etc.
+        details = db.Column(db.Text)
+        ip_address = db.Column(db.String(45))
+
+        def to_dict(self):
+            return {
+                'id': self.id,
+                'timestamp': self.timestamp.strftime('%d/%m/%Y %H:%M:%S'),
+                'user': self.user.username if self.user else None,
+                'action_type': self.action_type,
+                'module': self.module,
+                'details': self.details,
+                'ip_address': self.ip_address
+            }
+
     @app.route('/actions')
     @login_required
     def actions():
@@ -1372,6 +1393,30 @@ def create_app():
         )
         db.session.add(action)
         db.session.commit()
+
+    class Settings(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        company_name = db.Column(db.String(100), default='ALDER')
+        company_email = db.Column(db.String(100), default='contact@alder.fr')
+        backup_frequency = db.Column(db.Integer, default=1)  # heures
+        backup_retention = db.Column(db.Integer, default=30)  # jours
+        notification_email = db.Column(db.String(100))
+        notify_new_ticket = db.Column(db.Boolean, default=True)
+        notify_status_change = db.Column(db.Boolean, default=True)
+        notify_anomaly = db.Column(db.Boolean, default=True)
+        session_timeout = db.Column(db.Integer, default=30)  # minutes
+        max_login_attempts = db.Column(db.Integer, default=5)
+        tickets_per_page = db.Column(db.Integer, default=25)
+        date_format = db.Column(db.String(10), default='DD/MM/YYYY')
+
+        @classmethod
+        def get_settings(cls):
+            settings = cls.query.first()
+            if not settings:
+                settings = cls()
+                db.session.add(settings)
+                db.session.commit()
+            return settings
 
     @app.route('/settings')
     @admin_required
