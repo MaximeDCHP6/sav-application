@@ -247,8 +247,8 @@ def set_ticket_number(mapper, connection, target):
 
 @event.listens_for(User, 'before_insert')
 def set_user_defaults(mapper, connection, target):
-    if not target.password_hash:
-        target.set_password('changeme')
+    if not target.created_at:
+        target.created_at = datetime.now(timezone.utc)
 
 # Relations
 User.messages = db.relationship('Message', backref='user', lazy=True)
@@ -263,4 +263,26 @@ Ticket.messages = db.relationship('Message', backref='ticket', lazy=True, cascad
 Ticket.attachments = db.relationship('Attachment', backref='ticket', lazy=True, cascade='all, delete-orphan')
 Ticket.credit_note_validator = db.relationship('User', foreign_keys=[Ticket.credit_note_validated_by], backref='validated_credit_notes')
 
-Product.receptions = db.relationship('ReceptionLog', backref='product', lazy=True) 
+Product.receptions = db.relationship('ReceptionLog', backref='product', lazy=True)
+
+class UserAction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref='actions')
+    action_type = db.Column(db.String(20))  # create, update, delete, login, logout
+    module = db.Column(db.String(50))  # tickets, users, etc.
+    details = db.Column(db.Text)
+    ip_address = db.Column(db.String(45))
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'user_id': self.user_id,
+            'username': self.user.username if self.user else None,
+            'action_type': self.action_type,
+            'module': self.module,
+            'details': self.details,
+            'ip_address': self.ip_address
+        } 

@@ -13,7 +13,7 @@ from functools import wraps
 from io import BytesIO
 
 from extensions import db, login_manager
-from models import User, Client, Ticket, Product, Message, ReceptionLog, Attachment
+from models import User, Client, Ticket, Product, Message, ReceptionLog, Attachment, UserAction
 from notifications import init_mail, notify_new_ticket, notify_status_change, notify_anomaly
 from config import Config
 
@@ -1341,27 +1341,6 @@ def create_app():
         except Exception as e:
             app.logger.error(f"Erreur lors de l'export PDF: {str(e)}")
             return jsonify({'error': 'Une erreur est survenue lors de l\'export'}), 500
-
-    class UserAction(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-        user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-        user = db.relationship('User', backref='actions')
-        action_type = db.Column(db.String(20))  # create, update, delete, login, logout
-        module = db.Column(db.String(50))  # tickets, users, etc.
-        details = db.Column(db.Text)
-        ip_address = db.Column(db.String(45))
-
-        def to_dict(self):
-            return {
-                'id': self.id,
-                'timestamp': self.timestamp.strftime('%d/%m/%Y %H:%M:%S'),
-                'user': self.user.username if self.user else None,
-                'action_type': self.action_type,
-                'module': self.module,
-                'details': self.details,
-                'ip_address': self.ip_address
-            }
 
     @app.route('/actions')
     @login_required
