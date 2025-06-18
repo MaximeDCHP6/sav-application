@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_file, current_app, Response, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
-from werkzeug.urls import url_parse
+from urllib.parse import urlparse
 from datetime import datetime, timezone, timedelta, time
 import os
 from werkzeug.utils import secure_filename
@@ -134,7 +134,7 @@ def create_app():
                 login_user(user, remember=remember)
                 session['login_attempts'] = 0
                 next_page = request.args.get('next')
-                if not next_page or url_parse(next_page).netloc != '':
+                if not next_page or urlparse(next_page).netloc != '':
                     next_page = url_for('index')
                 return redirect(next_page)
             else:
