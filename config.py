@@ -73,7 +73,11 @@ class Config:
         
         @app.errorhandler(500)
         def internal_error(error):
-            db.session.rollback()
+            try:
+                from extensions import db
+                db.session.rollback()
+            except:
+                pass  # Ignorer si db n'est pas disponible
             return render_template('500.html'), 500
         
         @app.errorhandler(413)
